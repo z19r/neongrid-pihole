@@ -7,9 +7,13 @@ logo, a terminal ticker of 1337 quips, and neon chart colours.
 Easter egg: `↑↑↓↓←→←→BA` (or type `1337`) toggles 1337 mode, which adds a hue
 cycle and neon glyph rain. It is remembered per browser.
 
+![NEON//GRID dark dashboard](screenshots/neongrid.jpg)
+
 **Light mode — NEON//GRID DAYDREAM:** a pastel sunrise sky, frosted white glass,
 dark text and deeper neons. The ticker and code blocks stay as dark terminal
 windows. Switch with `sudo neongrid mode light|dark`.
+
+![NEON//GRID DAYDREAM light dashboard](screenshots/daydream.jpg)
 
 ## How it works
 
@@ -40,6 +44,12 @@ Switch between themes in Settings → Web interface / API → Theme
 ## Dev
 
 `just fmt`, `just fmt-check` (prettier + shfmt, 80 columns), `just test`.
+
+## Credits
+
+The installer is adapted from [pihole-lizard-theme][lizard] by
+[hbrtkp](https://github.com/hbrtkp) (MIT): the slot takeover, the cron re-apply
+after `pihole -up`, and the overall install flow are theirs. Go star it.
 
 Code: MIT. Fonts: Orbitron and Share Tech Mono, both under the SIL Open Font
 License 1.1 (see `theme/fonts-license/`).

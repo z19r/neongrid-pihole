@@ -8,6 +8,8 @@
 #   default-light  -> NEON//GRID DAYDREAM (light)
 # "pihole -up" restores the stock files; a cron job re-applies the theme.
 # Coexists with pihole-lizard-theme (which uses the high-contrast-dark slot).
+# Installer adapted from pihole-lizard-theme by hbrtkp (MIT):
+# https://github.com/hbrtkp/pihole-lizard-theme
 #
 #   sudo bash neongrid.sh install     install / update, select the theme
 #   sudo neongrid mode dark|light     switch the web UI between the two
