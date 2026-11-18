@@ -1,0 +1,788 @@
+/* ==========================================================================
+   NEON//GRID — neongrid theme for Pi-hole v6
+   Synthwave cyberdeck: perspective grid floor, scanlines, neon glass panels,
+   clipped corners, glitch logo. Appended to the stock default-darker.css by
+   neongrid.sh, so anything not styled here falls back to the dark theme.
+   ========================================================================== */
+
+@font-face {
+  font-family: "NG Orbitron";
+  src: url("ng-orbitron-700.woff2") format("woff2");
+  font-weight: 400 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "NG Orbitron";
+  src: url("ng-orbitron-900.woff2") format("woff2");
+  font-weight: 800 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: "NG Mono";
+  src: url("ng-sharetech.woff2") format("woff2");
+  font-display: swap;
+}
+
+:root {
+  --ng-active: 1;
+  --ng-bg: #07020f;
+  --ng-bg2: #120526;
+  --ng-panel: rgba(18, 6, 38, 0.72);
+  --ng-panel-solid: #140830;
+  --ng-line: rgba(0, 240, 255, 0.28);
+  --ng-pink: #ff2bd6;
+  --ng-cyan: #00f0ff;
+  --ng-lime: #b6ff00;
+  --ng-amber: #ffb800;
+  --ng-violet: #8a5cff;
+  --ng-text: #e8e6ff;
+  --ng-dim: #9d93c9;
+  --ng-display: "NG Orbitron", "Segoe UI", sans-serif;
+  --ng-mono: "NG Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --ng-notch: 14px;
+  --ng-glow-c:
+    0 0 6px rgba(0, 240, 255, 0.55), 0 0 22px rgba(0, 240, 255, 0.18);
+  --ng-glow-p:
+    0 0 6px rgba(255, 43, 214, 0.6), 0 0 24px rgba(255, 43, 214, 0.2);
+
+  /* Pi-hole's own chart colour hooks */
+  --allowed-color: #00f0ff;
+  --blocked-color: #ff2bd6;
+  --cached-color: #b6ff00;
+  --forwarded-color: #8a5cff;
+  /* read by pihole-theme-addons.js (lizard) and neongrid-addons.js */
+  --chart-palette:
+    #ff2bd6, #00f0ff, #b6ff00, #ffb800, #8a5cff, #ff5f5f, #2bffb1, #ff8a00,
+    #5c9dff, #f5ff6b, #ff6ad5, #6affff;
+  --chart-font: "NG Mono", monospace;
+  --chart-center: #e8e6ff;
+}
+
+/* ---------- canvas: sky, sun, grid floor, scanlines ---------- */
+html,
+body,
+.wrapper,
+.content-wrapper,
+.main-footer {
+  background: transparent !important;
+}
+html {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 100%, #3b0a5c 0%, transparent 70%),
+    linear-gradient(180deg, var(--ng-bg) 0%, var(--ng-bg2) 60%, #2a0640 100%)
+      fixed !important;
+  min-height: 100%;
+}
+body {
+  color: var(--ng-text) !important;
+  font-family: var(--ng-mono) !important;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+}
+/* grid floor */
+body::before {
+  content: "";
+  position: fixed;
+  left: -50%;
+  right: -50%;
+  bottom: -10vh;
+  height: 55vh;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 43, 214, 0.55) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 43, 214, 0.55) 1px, transparent 1px);
+  background-size: 60px 60px;
+  transform: perspective(320px) rotateX(62deg);
+  transform-origin: 50% 0;
+  mask-image: linear-gradient(180deg, transparent 0%, #000 35%, #000 100%);
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    #000 35%,
+    #000 100%
+  );
+  animation: ng-floor 2.2s linear infinite;
+  opacity: 0.45;
+}
+/* scanlines + vignette */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.18) 0 1px,
+      transparent 1px 3px
+    ),
+    radial-gradient(
+      ellipse at center,
+      transparent 60%,
+      rgba(0, 0, 0, 0.55) 100%
+    );
+  mix-blend-mode: multiply;
+}
+@keyframes ng-floor {
+  to {
+    background-position:
+      0 60px,
+      0 0;
+  }
+}
+
+::selection {
+  background: var(--ng-pink);
+  color: #000;
+}
+* {
+  scrollbar-color: var(--ng-pink) transparent;
+  scrollbar-width: thin;
+}
+a {
+  color: var(--ng-cyan);
+}
+a:hover,
+a:focus {
+  color: var(--ng-pink);
+  text-shadow: var(--ng-glow-p);
+}
+h1,
+h2,
+h3,
+h4,
+.box-title,
+.content-header > h1 {
+  font-family: var(--ng-display) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+.content-header > h1 {
+  color: var(--ng-cyan);
+  text-shadow: var(--ng-glow-c);
+}
+.content-header > h1::before {
+  content: "// ";
+  color: var(--ng-pink);
+}
+
+/* ---------- top bar & glitch logo ---------- */
+.main-header .navbar,
+.main-header .logo {
+  background: rgba(7, 2, 15, 0.82) !important;
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--ng-line) !important;
+  box-shadow: 0 1px 0 rgba(255, 43, 214, 0.35);
+}
+.main-header .logo .logo-lg,
+.login-logo .logo-lg {
+  position: relative;
+  display: inline-block;
+  font-family: var(--ng-display) !important;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  color: #fff !important;
+  text-shadow:
+    0 0 2px #fff,
+    var(--ng-glow-p);
+}
+.main-header .logo .logo-lg b,
+.login-logo .logo-lg b {
+  color: var(--ng-cyan);
+}
+.main-header .logo .logo-lg:hover {
+  animation: ng-glitch 0.35s steps(2) 3;
+}
+.main-header .logo-img,
+.user-panel .logo-img,
+.login-logo .logo-img {
+  filter: drop-shadow(0 0 6px rgba(255, 43, 214, 0.7));
+  animation: ng-hover 4s ease-in-out infinite;
+}
+@keyframes ng-hover {
+  50% {
+    transform: translateY(-4px) rotate(-3deg);
+  }
+}
+@keyframes ng-glitch {
+  0% {
+    transform: translate(0);
+    text-shadow:
+      -2px 0 var(--ng-pink),
+      2px 0 var(--ng-cyan);
+  }
+  33% {
+    transform: translate(-2px, 1px) skewX(-8deg);
+    text-shadow:
+      3px 0 var(--ng-lime),
+      -3px 0 var(--ng-pink);
+  }
+  66% {
+    transform: translate(2px, -1px) skewX(6deg);
+    text-shadow:
+      -3px 0 var(--ng-cyan),
+      3px 0 var(--ng-amber);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+.navbar-nav > li > a,
+.navbar .sidebar-toggle,
+.main-header .navbar .nav > li > a {
+  color: var(--ng-dim) !important;
+}
+.navbar-nav > li > a:hover,
+.main-header .navbar .sidebar-toggle:hover {
+  color: var(--ng-cyan) !important;
+  background: transparent !important;
+  text-shadow: var(--ng-glow-c);
+}
+.main-header .sidebar-toggle-svg path {
+  fill: currentColor;
+}
+
+/* ---------- sidebar: terminal ---------- */
+.main-sidebar,
+.left-side {
+  background: rgba(7, 2, 15, 0.86) !important;
+  border-right: 1px solid var(--ng-line);
+  backdrop-filter: blur(6px);
+}
+.user-panel {
+  border-bottom: 1px dashed rgba(255, 43, 214, 0.35);
+}
+.user-panel > .info,
+.user-panel > .info > p {
+  color: var(--ng-text) !important;
+  font-family: var(--ng-mono);
+}
+.user-panel > .info > p {
+  font-family: var(--ng-display) !important;
+  color: var(--ng-lime) !important;
+  letter-spacing: 0.2em;
+  text-shadow: 0 0 8px rgba(182, 255, 0, 0.6);
+}
+.user-panel > .info > p::after {
+  content: "_";
+  animation: ng-blink 1s steps(1) infinite;
+}
+@keyframes ng-blink {
+  50% {
+    opacity: 0;
+  }
+}
+.sidebar-menu > li.header {
+  background: transparent !important;
+  color: var(--ng-pink) !important;
+  font-family: var(--ng-display);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+}
+.sidebar-menu > li.header::before {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 2px;
+  margin-right: 8px;
+  vertical-align: middle;
+  background: var(--ng-pink);
+  box-shadow: var(--ng-glow-p);
+}
+.sidebar-menu > li > a,
+.sidebar-menu .treeview-menu > li > a {
+  color: var(--ng-dim) !important;
+  border-left: 3px solid transparent !important;
+  transition:
+    color 0.15s,
+    padding-left 0.15s,
+    background 0.15s;
+}
+.sidebar-menu > li > a:hover,
+.sidebar-menu .treeview-menu > li > a:hover {
+  color: var(--ng-cyan) !important;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 240, 255, 0.12),
+    transparent
+  ) !important;
+  padding-left: 20px;
+}
+.sidebar-menu > li.active > a,
+.sidebar-menu .treeview-menu > li.active > a,
+.sidebar-menu > li.menu-open > a {
+  color: #fff !important;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 43, 214, 0.28),
+    transparent
+  ) !important;
+  border-left-color: var(--ng-pink) !important;
+  text-shadow: var(--ng-glow-p);
+}
+.sidebar-menu > li.active > a > span::before {
+  content: "> ";
+  color: var(--ng-lime);
+}
+.sidebar-menu .treeview-menu {
+  background: rgba(0, 0, 0, 0.35) !important;
+}
+.sidebar-menu .label,
+.label-primary {
+  background: transparent !important;
+  border: 1px solid var(--ng-cyan);
+  color: var(--ng-cyan) !important;
+  font-family: var(--ng-mono);
+}
+
+/* ---------- panels: neon glass with clipped corners ---------- */
+.box,
+.small-box,
+.info-box,
+.modal-content,
+.login-box-body,
+.panel {
+  position: relative;
+  background: var(--ng-panel) !important;
+  color: var(--ng-text) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  backdrop-filter: blur(10px) saturate(1.3);
+  clip-path: polygon(
+    var(--ng-notch) 0,
+    100% 0,
+    100% calc(100% - var(--ng-notch)),
+    calc(100% - var(--ng-notch)) 100%,
+    0 100%,
+    0 var(--ng-notch)
+  );
+  box-shadow:
+    inset 0 0 0 1px var(--ng-line),
+    inset 0 0 40px rgba(138, 92, 255, 0.08) !important;
+}
+/* neon edge (clip-path eats outer shadows, so the glow lives on a pseudo) */
+.box::before,
+.small-box::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, var(--ng-pink), var(--ng-cyan)) top / 100% 2px
+      no-repeat,
+    linear-gradient(90deg, var(--ng-cyan), var(--ng-pink)) bottom / 40% 1px
+      no-repeat;
+  z-index: 2;
+}
+.box-header,
+.box-header.with-border {
+  background: transparent !important;
+  border-bottom: 1px dashed var(--ng-line) !important;
+  color: var(--ng-text) !important;
+}
+.box-title {
+  font-size: 13px !important;
+  color: var(--ng-cyan) !important;
+  text-shadow: var(--ng-glow-c);
+}
+.box-title::before {
+  content: "◢ ";
+  color: var(--ng-pink);
+}
+.box-tools .btn-box-tool,
+.btn-box-tool {
+  color: var(--ng-dim) !important;
+}
+.box .overlay,
+.overlay-wrapper .overlay {
+  background: rgba(7, 2, 15, 0.7) !important;
+}
+.box .overlay > .fa {
+  color: var(--ng-pink) !important;
+}
+
+/* stat tiles */
+.small-box {
+  transition: transform 0.2s ease;
+}
+.small-box:hover {
+  transform: translateY(-3px);
+}
+.small-box h3,
+.small-box .statistic {
+  font-family: var(--ng-display) !important;
+  font-weight: 900 !important;
+  font-size: 34px !important;
+  letter-spacing: 0.04em;
+}
+.small-box .inner p {
+  font-family: var(--ng-display);
+  font-size: 11px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: var(--ng-dim) !important;
+}
+.small-box .icon {
+  opacity: 0.25;
+  transition:
+    opacity 0.2s,
+    transform 0.3s;
+}
+.small-box:hover .icon {
+  opacity: 0.6;
+  transform: rotate(-8deg) scale(1.1);
+}
+.small-box:hover h3 {
+  animation: ng-glitch 0.3s steps(2) 2;
+}
+.small-box-footer {
+  background: rgba(0, 0, 0, 0.35) !important;
+  color: var(--ng-dim) !important;
+  font-family: var(--ng-mono);
+  text-transform: lowercase;
+}
+.small-box-footer:hover {
+  color: #fff !important;
+}
+.small-box.bg-aqua h3,
+.small-box.bg-aqua .icon {
+  color: var(--ng-cyan) !important;
+  text-shadow: var(--ng-glow-c);
+}
+.small-box.bg-red h3,
+.small-box.bg-red .icon {
+  color: var(--ng-pink) !important;
+  text-shadow: var(--ng-glow-p);
+}
+.small-box.bg-yellow h3,
+.small-box.bg-yellow .icon {
+  color: var(--ng-amber) !important;
+  text-shadow: 0 0 8px rgba(255, 184, 0, 0.6);
+}
+.small-box.bg-green h3,
+.small-box.bg-green .icon {
+  color: var(--ng-lime) !important;
+  text-shadow: 0 0 8px rgba(182, 255, 0, 0.6);
+}
+.bg-aqua,
+.bg-red,
+.bg-yellow,
+.bg-green,
+.bg-blue {
+  background-color: var(--ng-panel) !important;
+}
+
+/* ---------- tables ---------- */
+.table,
+.dataTable {
+  color: var(--ng-text) !important;
+  background: transparent !important;
+}
+.table > thead > tr > th,
+table.dataTable thead th {
+  font-family: var(--ng-display);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--ng-pink) !important;
+  border-color: var(--ng-line) !important;
+}
+.table > tbody > tr > td,
+.table-bordered,
+.table-bordered > tbody > tr > td,
+.table-bordered > thead > tr > th {
+  border-color: rgba(0, 240, 255, 0.12) !important;
+}
+.table-striped > tbody > tr:nth-of-type(odd),
+table.dataTable.stripe tbody tr.odd {
+  background: rgba(138, 92, 255, 0.06) !important;
+}
+.table > tbody > tr:hover,
+table.dataTable tbody tr:hover {
+  background: rgba(0, 240, 255, 0.1) !important;
+}
+
+/* ---------- forms & buttons ---------- */
+.form-control,
+.select2-container--default .select2-selection--single,
+.select2-container--default .select2-selection--multiple,
+.input-group-addon,
+.dataTables_filter input,
+.dataTables_length select,
+textarea {
+  background: rgba(0, 0, 0, 0.45) !important;
+  color: var(--ng-lime) !important;
+  border: 1px solid var(--ng-line) !important;
+  border-radius: 0 !important;
+  font-family: var(--ng-mono) !important;
+  caret-color: var(--ng-pink);
+}
+.form-control:focus,
+textarea:focus {
+  border-color: var(--ng-pink) !important;
+  box-shadow: var(--ng-glow-p) !important;
+}
+.btn {
+  border-radius: 0 !important;
+  font-family: var(--ng-display);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  transition:
+    box-shadow 0.15s,
+    color 0.15s;
+}
+.btn-default {
+  background: transparent !important;
+  color: var(--ng-cyan) !important;
+  border: 1px solid var(--ng-cyan) !important;
+}
+.btn-primary,
+.btn-success {
+  background: linear-gradient(
+    90deg,
+    var(--ng-pink),
+    var(--ng-violet)
+  ) !important;
+  color: #fff !important;
+  border: 0 !important;
+}
+.btn-danger {
+  background: transparent !important;
+  color: #ff5f5f !important;
+  border: 1px solid #ff5f5f !important;
+}
+.btn:hover {
+  box-shadow: var(--ng-glow-p);
+}
+.btn-default:hover {
+  box-shadow: var(--ng-glow-c);
+  color: #fff !important;
+}
+
+/* ---------- misc chrome ---------- */
+.main-footer {
+  border-top: 1px dashed var(--ng-line) !important;
+  color: var(--ng-dim) !important;
+}
+.nav-tabs-custom,
+.nav-tabs-custom > .tab-content {
+  background: var(--ng-panel) !important;
+}
+.nav-tabs-custom > .nav-tabs > li.active {
+  border-top-color: var(--ng-pink) !important;
+}
+.nav-tabs-custom > .nav-tabs > li > a {
+  font-family: var(--ng-display);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+.dropdown-menu {
+  background: var(--ng-panel-solid) !important;
+  border: 1px solid var(--ng-line) !important;
+  border-radius: 0 !important;
+}
+.callout,
+.alert {
+  border-radius: 0 !important;
+  background: rgba(0, 0, 0, 0.4) !important;
+  border-left: 4px solid var(--ng-amber) !important;
+  color: var(--ng-text) !important;
+}
+#nprogress .bar {
+  background: linear-gradient(90deg, var(--ng-pink), var(--ng-cyan)) !important;
+  height: 3px;
+}
+#nprogress .peg {
+  box-shadow:
+    0 0 10px var(--ng-pink),
+    0 0 5px var(--ng-cyan) !important;
+}
+pre,
+code,
+.log-lines,
+#output {
+  background: rgba(0, 0, 0, 0.6) !important;
+  color: var(--ng-lime) !important;
+  font-family: var(--ng-mono) !important;
+  border: 1px solid rgba(182, 255, 0, 0.25) !important;
+  border-radius: 0 !important;
+}
+
+/* ---------- login ---------- */
+.login-page,
+body.login-page {
+  background: transparent !important;
+}
+.login-box-body .box-title,
+.login-box-msg {
+  color: var(--ng-cyan) !important;
+}
+
+/* ---------- add-on bits (neongrid-addons.js) ---------- */
+#ng-ticker {
+  font-family: var(--ng-mono);
+  font-size: 13px;
+  color: var(--ng-lime);
+  margin: 0 0 15px;
+  padding: 6px 12px;
+  border: 1px solid rgba(182, 255, 0, 0.3);
+  background: rgba(0, 0, 0, 0.45);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#ng-ticker::before {
+  content: "root@pi.hole:~$ ";
+  color: var(--ng-pink);
+}
+#ng-ticker::after {
+  content: "█";
+  animation: ng-blink 1s steps(1) infinite;
+}
+#ng-rain {
+  position: fixed;
+  inset: 0;
+  z-index: 9997;
+  pointer-events: none;
+  opacity: 0.4;
+}
+html.ng-1337 .content-wrapper {
+  animation: ng-hue 3s linear infinite;
+}
+@keyframes ng-hue {
+  to {
+    filter: hue-rotate(360deg);
+  }
+}
+.ng-toast {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 9999;
+  padding: 12px 18px;
+  font-family: var(--ng-display);
+  letter-spacing: 0.2em;
+  color: #000;
+  background: var(--ng-lime);
+  box-shadow: 0 0 20px var(--ng-lime);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* small buttons share a row (login links): wide tracking overflows */
+.btn-sm,
+.btn-xs {
+  letter-spacing: 0.04em;
+  font-size: 10px;
+}
+
+/* ---------- sidebar status: keep every line inside the panel ---------- */
+.user-panel > .info {
+  right: 6px;
+  overflow: hidden;
+  font-size: 12.5px;
+  letter-spacing: 0;
+}
+.user-panel > .info > span,
+.user-panel > .info .server-status-line {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+}
+#server-status:empty {
+  display: none !important;
+}
+
+/* ---------- elements built by pihole-theme-addons.js (lizard) ---------- */
+html.pt-versions-ready .main-footer {
+  display: none !important;
+}
+.pt-versions {
+  display: grid;
+  grid-template-columns: repeat(var(--pt-vcols, 3), minmax(0, 1fr));
+  gap: 6px;
+  margin: auto 8px 8px;
+  padding-top: 10px;
+  border-top: 1px dashed rgba(255, 43, 214, 0.35);
+}
+.pt-versions > a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  padding: 7px 3px 6px;
+  border: 1px solid var(--ng-line);
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--ng-dim);
+  text-decoration: none;
+}
+.pt-versions > a:hover,
+.pt-versions > a:focus {
+  border-color: var(--ng-cyan);
+  color: var(--ng-cyan);
+  box-shadow: var(--ng-glow-c);
+  text-shadow: none;
+}
+.pt-versions > a > i {
+  font-size: 13px;
+  color: var(--ng-pink);
+}
+.pt-versions > a > b {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pt-versions > a.pt-update {
+  border-color: var(--ng-amber);
+}
+.pt-versions > a.pt-update > i,
+.pt-versions > a.pt-update > b {
+  color: var(--ng-amber);
+}
+@media (min-width: 768px) {
+  body.sidebar-collapse .pt-versions {
+    grid-template-columns: minmax(0, 1fr);
+    margin: auto 6px 6px;
+  }
+  body.sidebar-collapse .pt-versions > a > b {
+    display: none;
+  }
+}
+
+/* stat tiles: icon tucked in the corner behind the number, one-line label */
+.small-box .inner {
+  position: relative;
+  z-index: 1;
+}
+.small-box .inner p {
+  letter-spacing: 0.14em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.small-box .icon {
+  top: 6px !important;
+  right: 12px !important;
+  font-size: 46px !important;
+  opacity: 0.18;
+}
+.small-box .icon > i {
+  font-size: 46px !important;
+}

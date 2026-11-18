@@ -1,0 +1,8 @@
+{
+  "editor.formatOnSave": true,
+  "editor.rulers": [80],
+  "[shellscript]": { "editor.defaultFormatter": "mkhl.shfmt" },
+  "[css][javascript][markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}

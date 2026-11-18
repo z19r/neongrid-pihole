@@ -1,0 +1,228 @@
+/* ==========================================================================
+   NEON//GRID DAYDREAM — light variant. Appended after neongrid.css (on top
+   of the stock default-light.css): pastel sunrise sky, frosted white glass,
+   ink text, deeper neons tuned for contrast on white. The ticker and code
+   blocks stay dark terminal windows on purpose.
+   ========================================================================== */
+
+:root {
+  --ng-bg: #fdf0ff;
+  --ng-bg2: #ffe1f1;
+  --ng-panel: rgba(255, 255, 255, 0.74);
+  --ng-panel-solid: #ffffff;
+  --ng-line: rgba(0, 123, 150, 0.28);
+  --ng-pink: #c8008f;
+  --ng-cyan: #007b96;
+  --ng-lime: #3f7d00;
+  --ng-amber: #a85f00;
+  --ng-violet: #6a3df0;
+  --ng-text: #1d1236;
+  --ng-dim: #5f557f;
+  --ng-ink: #1d1236;
+  --ng-glow-c: 0 0 10px rgba(0, 123, 150, 0.22);
+  --ng-glow-p: 0 0 10px rgba(200, 0, 143, 0.22);
+
+  --allowed-color: #00a3c4;
+  --blocked-color: #e0179f;
+  --cached-color: #6fae00;
+  --forwarded-color: #6a3df0;
+  --chart-palette:
+    #e0179f, #00a3c4, #6fae00, #e08a00, #6a3df0, #e5484d, #00b386, #ff7a1a,
+    #3b7bff, #b5a300, #ff4fbf, #00b8b8;
+  --chart-center: #1d1236;
+}
+
+/* ---------- sky: sunrise gradient, a sun, pink grid on lavender ---------- */
+html {
+  background:
+    radial-gradient(
+      circle at 50% 108%,
+      #ffd36e 0%,
+      #ff9ecf 16%,
+      transparent 34%
+    ),
+    linear-gradient(
+        180deg,
+        #e6f7ff 0%,
+        var(--ng-bg) 45%,
+        var(--ng-bg2) 75%,
+        #f3d6ff 100%
+      )
+      fixed !important;
+}
+body::before {
+  background-image:
+    linear-gradient(rgba(200, 0, 143, 0.35) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(200, 0, 143, 0.35) 1px, transparent 1px);
+  opacity: 0.55;
+}
+body::after {
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(90, 0, 140, 0.035) 0 1px,
+      transparent 1px 3px
+    ),
+    radial-gradient(
+      ellipse at center,
+      transparent 65%,
+      rgba(180, 120, 255, 0.25) 100%
+    );
+}
+::selection {
+  background: var(--ng-pink);
+  color: #fff;
+}
+
+/* ---------- chrome ---------- */
+.main-header .navbar,
+.main-header .logo {
+  background: rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 0 1px 0 rgba(200, 0, 143, 0.3);
+}
+/* retro chromatic offset instead of a glow */
+.main-header .logo .logo-lg,
+.login-logo .logo-lg {
+  color: var(--ng-ink) !important;
+  text-shadow:
+    2px 2px 0 rgba(255, 79, 191, 0.55),
+    -2px -1px 0 rgba(0, 184, 212, 0.5);
+}
+.main-header .logo .logo-lg b,
+.login-logo .logo-lg b {
+  color: var(--ng-pink);
+}
+.main-header .logo-img,
+.user-panel .logo-img,
+.login-logo .logo-img {
+  filter: drop-shadow(0 4px 6px rgba(200, 0, 143, 0.3));
+}
+.main-sidebar,
+.left-side {
+  background: rgba(255, 255, 255, 0.72) !important;
+}
+.user-panel {
+  border-bottom-color: rgba(200, 0, 143, 0.3);
+}
+.user-panel > .info > p {
+  text-shadow: none;
+}
+.sidebar-menu > li > a:hover,
+.sidebar-menu .treeview-menu > li > a:hover {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 123, 150, 0.12),
+    transparent
+  ) !important;
+}
+.sidebar-menu > li.active > a,
+.sidebar-menu .treeview-menu > li.active > a,
+.sidebar-menu > li.menu-open > a {
+  color: var(--ng-ink) !important;
+  background: linear-gradient(
+    90deg,
+    rgba(200, 0, 143, 0.16),
+    transparent
+  ) !important;
+  text-shadow: none;
+}
+.sidebar-menu .treeview-menu {
+  background: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* ---------- panels ---------- */
+.box,
+.small-box,
+.info-box,
+.modal-content,
+.login-box-body,
+.panel {
+  box-shadow:
+    inset 0 0 0 1px var(--ng-line),
+    inset 0 0 40px rgba(255, 158, 207, 0.12) !important;
+}
+.box .overlay,
+.overlay-wrapper .overlay {
+  background: rgba(255, 255, 255, 0.7) !important;
+}
+.small-box-footer {
+  background: rgba(106, 61, 240, 0.06) !important;
+}
+.small-box-footer:hover {
+  color: var(--ng-ink) !important;
+}
+.small-box.bg-aqua h3,
+.small-box.bg-red h3,
+.small-box.bg-yellow h3,
+.small-box.bg-green h3,
+.small-box.bg-aqua .icon,
+.small-box.bg-red .icon,
+.small-box.bg-yellow .icon,
+.small-box.bg-green .icon {
+  text-shadow: 2px 2px 0 rgba(29, 18, 54, 0.12) !important;
+}
+.small-box .icon {
+  opacity: 0.14;
+}
+
+/* ---------- tables & forms ---------- */
+.table > tbody > tr > td,
+.table-bordered,
+.table-bordered > tbody > tr > td,
+.table-bordered > thead > tr > th {
+  border-color: rgba(0, 123, 150, 0.14) !important;
+}
+.table-striped > tbody > tr:nth-of-type(odd),
+table.dataTable.stripe tbody tr.odd {
+  background: rgba(106, 61, 240, 0.05) !important;
+}
+.table > tbody > tr:hover,
+table.dataTable tbody tr:hover {
+  background: rgba(0, 163, 196, 0.1) !important;
+}
+.form-control,
+.select2-container--default .select2-selection--single,
+.select2-container--default .select2-selection--multiple,
+.input-group-addon,
+.dataTables_filter input,
+.dataTables_length select,
+textarea {
+  background: rgba(255, 255, 255, 0.85) !important;
+  color: var(--ng-ink) !important;
+}
+.btn-danger {
+  color: #c4282d !important;
+  border-color: #c4282d !important;
+}
+.btn-default:hover {
+  color: var(--ng-ink) !important;
+}
+.callout,
+.alert {
+  background: rgba(255, 255, 255, 0.75) !important;
+}
+.dropdown-menu > li > a {
+  color: var(--ng-text) !important;
+}
+
+/* ---------- dark terminal windows in a bright room ---------- */
+pre,
+code,
+.log-lines,
+#output,
+#ng-ticker {
+  background: rgba(29, 18, 54, 0.92) !important;
+  color: #b6ff00 !important;
+  border-color: rgba(29, 18, 54, 0.9) !important;
+}
+#ng-ticker::before {
+  color: #ff6ad5;
+}
+
+/* ---------- lizard add-on bits ---------- */
+.pt-versions {
+  border-top-color: rgba(200, 0, 143, 0.3);
+}
+.pt-versions > a {
+  background: rgba(255, 255, 255, 0.6);
+}
